@@ -9,7 +9,7 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
-    env: 
+    env:
       GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       GITHUB_REPOSITORY: ${{ secrets.GITHUB_REPOSITORY }}
       GITHUB_ACTOR: ${{ secrets.GITHUB_ACTOR }}
@@ -18,9 +18,9 @@ jobs:
       - uses: actions/setup-node@v2
         with:
           node-version: '16.x'
-          cache: 'npm' 
-      - run: git config --global user.email "ivancheninbox@gmail.com"
+          cache: 'npm'
+      - run: git config --global user.email "fribbelsgithub@gmail.com"
       - run: git config --global user.name "GH Actions"
-      - run: git remote set-url origin https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/fribbels/beta-hsr-optimizer
+      - run: git remote set-url origin https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/fribbels/dreary-quibbles
       - run: npm install
       - run: npm run deploy
