@@ -2,7 +2,7 @@
   "name": "hsr-optimizer",
   "version": "1.0.0",
   "private": true,
-  "homepage": "https://fribbels.github.io/hsr-optimizer",
+  "homepage": "https://fribbels.github.io/beta-hsr-optimizer",
   "dependencies": {
     "@ant-design/icons": "^5.2.6",
     "@testing-library/jest-dom": "^5.17.0",
