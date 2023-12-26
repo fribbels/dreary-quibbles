@@ -1,0 +1,110 @@
+TODAY:
+UPDATE DOCS
+update try file 
+
+LATER:
+apply stat decimals
+per relic hover actions
+filter light cones by path
+optimize with partial build results
+easier to edit artifact
+
+DONE
+remove level 0s
+reset buttons
+keep current filter
+grid pinned row build
+clear saves
+save filters, remove test filter fill in
+implement filter
+fully equipped icon display on characters
+fill out light cone level/eidolon stats
+recalculate stat levels per ascension
+apply permutations set filter 
+OCR:
+ocr version on importer tab
+ocr updates get rank, apply rank filter
+{NICKNAME}
+fix fonts
+lightcone pic
+apply stat decimals
+{NICKNAME}
+lc/char e/s display
+maxed main stat filter
+ocr updates UI 
+add cv / stat ratings on relics 
+add ratings to relic preview
+grid backgrounds
+apply validations to form 
+confirmations
+try it out importer
+duplicate equipped safety
+discord/github links
+compact main stat tag
+icons for dropdown sets selector
+relics -> inventory?
+hover over icon for set name text/etc
+split try into new tab
+guide tab
+fix set selector height
+NEW SETS 
+ornament conditional bonuses?
+analytics
+use minimum roll rounded to 10ths as baseline
+save then recalculate score
+calc character score
+make sidebar persistent
+filter same id from support list
+take out scoring sets
+upload file default location filter json
+
+
+
+function defaultCharacter(e) {
+  let value = (e >= 0) ? -1 : -1
+
+  let basicScaling = basic(e, 1.00, 1.10)
+  let skillScaling = skill(e, -1, -1)
+  let ultScaling = ult(e, -1, -1)
+
+  return {
+    display: () => (
+      <Flex vertical gap={10} >
+        <FormSwitch name='talentName' text='Text'/>
+        <FormSlider name='talentHpDrainAtkBuff' text='HP drain ATK buff' min={0} max={0} percent />
+      </Flex>
+    ),
+    defaults: () => ({
+      talentName: true,
+      switchEnabledName: true,
+      sliderName: 0,
+    }),
+    precomputeEffects: (request) => {
+      let r = request.characterConditionals
+      let x = Object.assign({}, baseComputedStatsObject)
+
+      // Stats
+
+      // Scaling
+      x.BASIC_SCALING += basicScaling
+      x.SKILL_SCALING += skillScaling
+      x.ULT_SCALING += ultScaling
+
+      // Boost
+
+      return x
+    },
+    calculatePassives: (c, request) => {
+
+    },
+    calculateBaseMultis: (c, request) => {
+      let r = request.characterConditionals
+      let x = c.x
+
+      x.BASIC_DMG += x.BASIC_SCALING * x[Stats.ATK]
+      x.SKILL_DMG += x.SKILL_SCALING * x[Stats.ATK]
+      x.ULT_DMG += x.ULT_SCALING * x[Stats.ATK]
+      // x.FUA_DMG += 0
+    }
+  }
+}
