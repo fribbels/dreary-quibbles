@@ -43,6 +43,7 @@ import { TooltipImage } from './TooltipImage';
 import { SaveState } from '../lib/saveState';
 import {CharacterConditionals} from "../lib/characterConditionals";
 import {LightConeConditionals} from "../lib/lightConeConditionals";
+import {FormStatRollSlider, FormStatRollSliderTopPercent} from "./optimizerTab/FormStatRollSlider";
 const { TextArea } = Input;
 const { Text } = Typography;
 const { SHOW_CHILD } = Cascader;
@@ -160,6 +161,7 @@ let panelWidth = 200;
 let defaultGap = 5;
 
 export default function OptimizerForm() {
+  console.log('OptimizerForm')
   const [optimizerForm] = Form.useForm();
   window.optimizerForm = optimizerForm
 
@@ -168,28 +170,32 @@ export default function OptimizerForm() {
 
   const [drawerOpen, setDrawerOpen] = useState(false);
 
-  const [optimizerPermutationSearched, setOptimizerPermutationSearched] = useState(0)
-  const [optimizerPermutationResults, setOptimizerPermutationResults] = useState(0)
-  const [optimizerPermutationDetails, setOptimizerPermutationDetails] = useState({
-    Head: 0,
-    Hands: 0,
-    Body: 0,
-    Feet: 0,
-    PlanarSphere: 0,
-    LinkRope: 0,
-    HeadTotal: DB.getRelics().filter(x => x.part == Constants.Parts.Head).length,
-    HandsTotal: DB.getRelics().filter(x => x.part == Constants.Parts.Hands).length,
-    BodyTotal: DB.getRelics().filter(x => x.part == Constants.Parts.Body).length,
-    FeetTotal: DB.getRelics().filter(x => x.part == Constants.Parts.Feet).length,
-    PlanarSphereTotal: DB.getRelics().filter(x => x.part == Constants.Parts.PlanarSphere).length,
-    LinkRopeTotal: DB.getRelics().filter(x => x.part == Constants.Parts.LinkRope).length,
-    permutations: 0,
-    searched: 0,
-    results: 0
-  });
-  window.setOptimizerPermutationSearched = setOptimizerPermutationSearched
-  window.setOptimizerPermutationResults = setOptimizerPermutationResults
-  window.setOptimizerPermutationDetails = setOptimizerPermutationDetails
+  // const [optimizerPermutationSearched, setOptimizerPermutationSearched] = useState(0)
+  // const [optimizerPermutationResults, setOptimizerPermutationResults] = useState(0)
+  // const [optimizerPermutationDetails, setOptimizerPermutationDetails] = useState({
+  //   Head: 0,
+  //   Hands: 0,
+  //   Body: 0,
+  //   Feet: 0,
+  //   PlanarSphere: 0,
+  //   LinkRope: 0,
+  //   HeadTotal: DB.getRelics().filter(x => x.part == Constants.Parts.Head).length,
+  //   HandsTotal: DB.getRelics().filter(x => x.part == Constants.Parts.Hands).length,
+  //   BodyTotal: DB.getRelics().filter(x => x.part == Constants.Parts.Body).length,
+  //   FeetTotal: DB.getRelics().filter(x => x.part == Constants.Parts.Feet).length,
+  //   PlanarSphereTotal: DB.getRelics().filter(x => x.part == Constants.Parts.PlanarSphere).length,
+  //   LinkRopeTotal: DB.getRelics().filter(x => x.part == Constants.Parts.LinkRope).length,
+  //   permutations: 0,
+  //   searched: 0,
+  //   results: 0
+  // });
+  // const permutationDetails = store(s => s.permutationDetails)
+  // const setPermutationDetails = store(s => s.setPermutationDetails)
+
+  // window.setOptimizerPermutationSearched = setOptimizerPermutationSearched
+  // window.setOptimizerPermutationResults = setOptimizerPermutationResults
+  // window.setOptimizerPermutationDetails = setPermutationDetails
+
 
   const setChampionOfStreetwiseBoxingOptions = useMemo(() => {
     let options = []
@@ -415,6 +421,8 @@ export default function OptimizerForm() {
   }
 
   const onFinish = (x) => {
+    document.getElementById("optimizerBuildPreviewContainer").scrollIntoView({behavior: 'instant', block: 'nearest'})
+
     OptimizerTabController.fixForm(x);
     if (!OptimizerTabController.validateForm(x)) {
       return
@@ -430,12 +438,22 @@ export default function OptimizerForm() {
     message.error('Submit failed!');
   };
 
-  const onValuesChange = (changedValues, allValues) => {
+  const onValuesChange = (changedValues, allValues, bypass) => {
     if (!changedValues) return;
     let keys = Object.keys(changedValues)
-    if (keys.length == 1 && (keys[0].startsWith('min') || keys[0].startsWith('max') || keys[0].startsWith('buff') || keys[0] == 'characterConditionals') || keys[0] == 'lightConeConditionals') {
+    if (bypass) {
+      // Allow certain values to refresh permutations.
+      // Sliders should only update at the end of the drag
+    } else if (keys.length == 1 && (
+        keys[0].startsWith('min') ||
+        keys[0].startsWith('max') ||
+        keys[0].startsWith('buff') ||
+        keys[0].startsWith('weights') ||
+        keys[0] == 'characterConditionals' ||
+        keys[0] == 'lightConeConditionals')) {
       return;
     }
+    let date1 = new Date()
     let request = allValues
     let relics = DB.getRelics()
     console.log('Values changed', request, changedValues)
@@ -450,6 +468,7 @@ export default function OptimizerForm() {
 
     relics = RelicFilters.splitRelicsByPart(relics)
     relics = RelicFilters.applyCurrentFilter(request, relics);
+    relics = RelicFilters.applyTopFilter(request, relics);
 
     let permutationDetails = {
       Head: relics.Head.length,
@@ -463,10 +482,13 @@ export default function OptimizerForm() {
       BodyTotal: preFilteredRelicsByPart[Constants.Parts.Body].length,
       FeetTotal: preFilteredRelicsByPart[Constants.Parts.Feet].length,
       PlanarSphereTotal: preFilteredRelicsByPart[Constants.Parts.PlanarSphere].length,
-      LinkRopeTotal: preFilteredRelicsByPart[Constants.Parts.LinkRope].length,
-      permutations: relics.Head.length * relics.Hands.length * relics.Body.length * relics.Feet.length * relics.PlanarSphere.length * relics.LinkRope.length
+      LinkRopeTotal: preFilteredRelicsByPart[Constants.Parts.LinkRope].length
     }
-    setOptimizerPermutationDetails(permutationDetails)
+    store.getState().setPermutationDetails(permutationDetails)
+    store.getState().setPermutations(relics.Head.length * relics.Hands.length * relics.Body.length * relics.Feet.length * relics.PlanarSphere.length * relics.LinkRope.length)
+
+    let date2 = new Date()
+    console.warn(date2.getTime()-date1.getTime())
     console.log('Filtered relics', relics, permutationDetails)
   }
   window.onOptimizerFormValuesChange = onValuesChange;
@@ -474,9 +496,10 @@ export default function OptimizerForm() {
   const filterOption = (input, option) =>
     (option?.label ?? '').toLowerCase().includes(input.toLowerCase());
 
-  let parentH = 285;
-  let parentW = panelWidth;
-  let innerW = 300;
+  let parentW = 233;
+  let parentH = 350;
+  let innerW = 350;
+  let innerH = 400;
 
   const initialValues = useMemo(() => {
     if (selectedCharacter) {
@@ -530,16 +553,25 @@ export default function OptimizerForm() {
     console.log('Cancel clicked');
     Optimizer.cancel()
   }
+  window.optimizerCancelClicked = cancelClicked
 
   function resetClicked(x) {
     console.log('Reset clicked');
     OptimizerTabController.resetFilters()
   }
+  window.optimizerResetClicked = resetClicked
 
   function filterClicked(x) {
     console.log('Filter clicked');
     OptimizerTabController.applyRowFilters()
   }
+  window.optimizerFilterClicked = filterClicked
+
+  function startClicked(x) {
+    console.log('Start clicked');
+    optimizerForm.submit()
+  }
+  window.optimizerStartClicked = startClicked
 
   function ornamentSetTagRenderer(props) {
     const { label, value, closable, onClose } = props;
@@ -616,15 +648,15 @@ export default function OptimizerForm() {
         onValuesChange={onValuesChange}
         initialValues={initialValues}
       >
-        <FilterContainer >
-          <FormRow gap={defaultGap}>
-            <FormCard>
-              <div style={{ width: `${parentW}px`, height: `${parentH}px`, overflow: 'hidden', borderRadius: '10px' }}>
+        <FilterContainer>
+          <FormRow gap={defaultGap} title='Character options'>
+            <FormCard style={{overflow: 'hidden'}}>
+              <div style={{ width: `${parentW}px`, height: `${parentH}px`,  borderRadius: '10px' }}>
                 <Image
                   preview={false}
                   width={innerW}
                   src={Assets.getCharacterPreview(selectedCharacter)}
-                  style={{ transform: `translate(${(innerW - parentW) / 2 / innerW * -100}%, ${(innerW - parentH) / 2 / innerW * -100}%)` }}
+                  style={{ transform: `translate(${(innerW - parentW) / 2 / innerW * -100}%, ${(innerH - parentH) / 2 / innerH * -100}%)` }}
                 />
               </div>
             </FormCard>
@@ -697,6 +729,105 @@ export default function OptimizerForm() {
               </Flex>
             </FormCard>
 
+            <FormCard>
+              <Flex justify='space-between' align='center'>
+                <HeaderText>Optimizer Options</HeaderText>
+                <TooltipImage type={Hint.optimizerOptions()} />
+              </Flex>
+
+              <Flex align='center'>
+                <Form.Item name="rankFilter" valuePropName="checked">
+                  <Switch
+                    checkedChildren={<CheckOutlined />}
+                    unCheckedChildren={<CloseOutlined />}
+                    defaultChecked
+                    style={{ width: 45, marginRight: 10 }}
+                  />
+                </Form.Item>
+                <Text>Rank filter</Text>
+              </Flex>
+
+              <Flex align='center'>
+                <Form.Item name="predictMaxedMainStat" valuePropName="checked">
+                  <Switch
+                    checkedChildren={<CheckOutlined />}
+                    unCheckedChildren={<CloseOutlined />}
+                    defaultChecked
+                    style={{ width: 45, marginRight: 10 }}
+                  />
+                </Form.Item>
+                <Text>Maxed main stat</Text>
+              </Flex>
+
+              <Flex align='center'>
+                <Form.Item name="keepCurrentRelics" valuePropName="checked">
+                  <Switch
+                    checkedChildren={<CheckOutlined />}
+                    unCheckedChildren={<CloseOutlined />}
+                    defaultChecked
+                    style={{ width: 45, marginRight: 10 }}
+                  />
+                </Form.Item>
+                <Text>Keep current relics</Text>
+              </Flex>
+
+
+              <Flex justify='space-between'>
+                <Form.Item name="enhance">
+                  <Select
+                    style={{ width: (panelWidth - defaultGap) / 2 }}
+                    options={[
+                      { value: 0, label: '+0' },
+                      { value: 3, label: '+3' },
+                      { value: 6, label: '+6' },
+                      { value: 9, label: '+9' },
+                      { value: 12, label: '+12' },
+                      { value: 15, label: '+15' },
+                    ]}
+                  />
+                </Form.Item>
+
+                <Form.Item name="grade">
+                  <Select
+                    style={{ width: (panelWidth - defaultGap) / 2 }}
+                    options={[
+                      { value: 2, label: '2+ stars' },
+                      { value: 3, label: '3+ stars' },
+                      { value: 4, label: '4+ stars' },
+                      { value: 5, label: '5 stars' },
+                    ]}
+                  />
+                </Form.Item>
+              </Flex>
+              {/*
+                <Button type="primary" onClick={showDrawer}>
+                  Advanced Options
+                </Button>
+                <Drawer
+                  placement="right"
+                  closable={false}
+                  onClose={onClose}
+                  open={open}
+                  getContainer={false}
+                  width={250}
+                >
+                  <HeaderText>
+                    Damage Buffs 
+                    Coming Soon
+                  </HeaderText>
+
+                  <Divider style={{marginTop: '8px', marginBottom: '12px'}}/>
+                  
+                </Drawer>
+
+                <Text>Actions</Text>
+                <Button type="primary" onClick={saveCharacterClicked} style={{width: '100%'}}>
+                  Save Character
+                </Button> */}
+            </FormCard>
+          </FormRow>
+
+          <FormRow title='Relic & stat filters'>
             <FormCard>
               <Flex vertical gap={defaultGap}>
                 <Flex justify='space-between' align='center'>
@@ -828,22 +959,46 @@ export default function OptimizerForm() {
                 </ConfigProvider>
               </Flex>
             </FormCard>
+            <FormCard>
+              <Flex vertical gap={defaultGap}>
+                <Flex justify='space-between' align='center'>
+                  <HeaderText>Substat Weight Filter</HeaderText>
+                  {/*<TooltipImage type={Hint.mainStats()} />*/}
+                </Flex>
+
+                <Flex vertical gap={0}>
+                  <FormStatRollSlider text='ATK' name={Constants.Stats.ATK_P} />
+                  <FormStatRollSlider text='DEF' name={Constants.Stats.DEF_P} />
+                  <FormStatRollSlider text='HP' name={Constants.Stats.HP_P} />
+                  <FormStatRollSlider text='SPD' name={Constants.Stats.SPD} />
+                  <FormStatRollSlider text='CR' name={Constants.Stats.CR} />
+                  <FormStatRollSlider text='CD' name={Constants.Stats.CD} />
+                  <FormStatRollSlider text='EHR' name={Constants.Stats.EHR} />
+                  <FormStatRollSlider text='RES' name={Constants.Stats.RES} />
+                  <FormStatRollSlider text='BE' name={Constants.Stats.BE} />
+                </Flex>
+                <HorizontalDivider/>
+                <Text>Top % of weighted relics</Text>
+                <FormStatRollSliderTopPercent/>
+              </Flex>
+            </FormCard>
 
             <FormCard>
               <Flex justify='space-between' align='center'>
                 <HeaderText>Stat Filters</HeaderText>
                 <TooltipImage type={Hint.statFilters()} />
               </Flex>
-
-              <FilterRow name='Atk' label='ATK' />
-              <FilterRow name='Hp' label='HP' />
-              <FilterRow name='Def' label='DEF' />
-              <FilterRow name='Spd' label='SPD' />
-              <FilterRow name='Cr' label='CR' />
-              <FilterRow name='Cd' label='CD' />
-              <FilterRow name='Ehr' label='EHR' />
-              <FilterRow name='Res' label='RES' />
-              <FilterRow name='Be' label='BE' />
+              <Flex vertical gap={5}>
+                <FilterRow name='Atk' label='ATK' />
+                <FilterRow name='Hp' label='HP' />
+                <FilterRow name='Def' label='DEF' />
+                <FilterRow name='Spd' label='SPD' />
+                <FilterRow name='Cr' label='CR' />
+                <FilterRow name='Cd' label='CD' />
+                <FilterRow name='Ehr' label='EHR' />
+                <FilterRow name='Res' label='RES' />
+                <FilterRow name='Be' label='BE' />
+              </Flex>
             </FormCard>
 
             <FormCard>
@@ -858,7 +1013,9 @@ export default function OptimizerForm() {
                 <FilterRow name='Mcd' label='MCD' />
                 <FilterRow name='Ehp' label='EHP' />
               </Flex>
+            </FormCard>
 
+            <FormCard>
               <Flex vertical gap={defaultGap}>
                 <Flex justify='space-between' align='center'>
                   <HeaderText>Combat Buffs</HeaderText>
@@ -901,157 +1058,42 @@ export default function OptimizerForm() {
                       <InputNumberStyled size="small" controls={false} />
                     </Form.Item>
                   </Flex>
+
+                  <Flex justify='space-between'>
+                    <Text>
+                      Spd
+                    </Text>
+                    <Form.Item size="default" name='buffSpd'>
+                      <InputNumberStyled size="small" controls={false} />
+                    </Form.Item>
+                  </Flex>
+
+                  <Flex justify='space-between'>
+                    <Text>
+                      Def shred %
+                    </Text>
+                    <Form.Item size="default" name='buffDefShred'>
+                      <InputNumberStyled size="small" controls={false} />
+                    </Form.Item>
+                  </Flex>
+
+                  <Flex justify='space-between'>
+                    <Text>
+                      Res pen %
+                    </Text>
+                    <Form.Item size="default" name='buffResPen'>
+                      <InputNumberStyled size="small" controls={false} />
+                    </Form.Item>
+                  </Flex>
                 </Flex>
               </Flex>
             </FormCard>
           </FormRow>
 
-          <FormRow>
-            <FormCard>
-              <Flex justify='space-between' align='center'>
-                <HeaderText>Optimizer Options</HeaderText>
-                <TooltipImage type={Hint.optimizerOptions()} />
-              </Flex>
-
-              <Flex align='center'>
-                <Form.Item name="rankFilter" valuePropName="checked">
-                  <Switch
-                    checkedChildren={<CheckOutlined />}
-                    unCheckedChildren={<CloseOutlined />}
-                    defaultChecked
-                    style={{ width: 45, marginRight: 10 }}
-                  />
-                </Form.Item>
-                <Text>Rank filter</Text>
-              </Flex>
-
-              <Flex align='center'>
-                <Form.Item name="predictMaxedMainStat" valuePropName="checked">
-                  <Switch
-                    checkedChildren={<CheckOutlined />}
-                    unCheckedChildren={<CloseOutlined />}
-                    defaultChecked
-                    style={{ width: 45, marginRight: 10 }}
-                  />
-                </Form.Item>
-                <Text>Maxed main stat</Text>
-              </Flex>
-
-              <Flex align='center'>
-                <Form.Item name="keepCurrentRelics" valuePropName="checked">
-                  <Switch
-                    checkedChildren={<CheckOutlined />}
-                    unCheckedChildren={<CloseOutlined />}
-                    defaultChecked
-                    style={{ width: 45, marginRight: 10 }}
-                  />
-                </Form.Item>
-                <Text>Keep current relics</Text>
-              </Flex>
+          <FormRow title='Passive effects'>
 
 
-              <Flex justify='space-between'>
-                <Form.Item name="enhance">
-                  <Select
-                    style={{ width: (panelWidth - defaultGap) / 2 }}
-                    options={[
-                      { value: 0, label: '+0' },
-                      { value: 3, label: '+3' },
-                      { value: 6, label: '+6' },
-                      { value: 9, label: '+9' },
-                      { value: 12, label: '+12' },
-                      { value: 15, label: '+15' },
-                    ]}
-                  />
-                </Form.Item>
-
-                <Form.Item name="grade">
-                  <Select
-                    style={{ width: (panelWidth - defaultGap) / 2 }}
-                    options={[
-                      { value: 2, label: '2+ stars' },
-                      { value: 3, label: '3+ stars' },
-                      { value: 4, label: '4+ stars' },
-                      { value: 5, label: '5 stars' },
-                    ]}
-                  />
-                </Form.Item>
-              </Flex>
-              {/*
-                <Button type="primary" onClick={showDrawer}>
-                  Advanced Options
-                </Button>
-                <Drawer
-                  placement="right"
-                  closable={false}
-                  onClose={onClose}
-                  open={open}
-                  getContainer={false}
-                  width={250}
-                >
-                  <HeaderText>
-                    Damage Buffs 
-                    Coming Soon
-                  </HeaderText>
-
-                  <Divider style={{marginTop: '8px', marginBottom: '12px'}}/>
-                  
-                </Drawer>
-
-                <Text>Actions</Text>
-                <Button type="primary" onClick={saveCharacterClicked} style={{width: '100%'}}>
-                  Save Character
-                </Button> */}
-              <Flex justify='space-between' align='center'>
-                <HeaderText>Actions</HeaderText>
-                <TooltipImage type={Hint.actions()} />
-              </Flex>
-
-              <Flex gap={defaultGap} style={{ marginBottom: 2 }} vertical>
-                <Flex gap={defaultGap}>
-                  <Button type="primary" htmlType="submit" style={{ width: '100px' }} >
-                    Start
-                  </Button>
-                  <Button type="primary" onClick={cancelClicked} style={{ width: '100px' }} >
-                    Cancel
-                  </Button>
-                </Flex>
-                <Flex gap={defaultGap}>
-
-                  <Button type="primary" onClick={filterClicked} style={{ width: '100px' }} >
-                    Filter
-                  </Button>
-                  <Button type="primary" onClick={resetClicked} style={{ width: '100px' }} >
-                    Reset
-                  </Button>
-                </Flex>
-              </Flex>
-            </FormCard>
-
-            <FormCard>
-              <Flex justify='space-between' align='center'>
-                <HeaderText>Permutations</HeaderText>
-                <TooltipImage type={Hint.optimizationDetails()} />
-              </Flex>
-
-              <PermutationDisplayPanel
-                optimizerPermutationDetails={optimizerPermutationDetails}
-                searched={optimizerPermutationSearched}
-                results={optimizerPermutationResults}
-              />
-
-              <HeaderText>
-                Build
-              </HeaderText>
-
-              <Flex gap={defaultGap} justify='space-around'>
-                <Button type="primary" onClick={OptimizerTabController.equipClicked} style={{ width: '100px' }} >
-                  Equip
-                </Button>
-              </Flex>
-            </FormCard>
-
-            <FormCard>
+          <FormCard>
               <HeaderText>Conditionals</HeaderText>
 
               <Button onClick={() => setDrawerOpen(true)}>
@@ -1198,6 +1240,7 @@ export default function OptimizerForm() {
                 </Drawer>
               </ConfigProvider>
             </FormCard>
+
             <FormCard>
               {CharacterConditionals.getDisplayForCharacter(selectedCharacter.id, characterEidolon)}
             </FormCard>
@@ -1205,6 +1248,7 @@ export default function OptimizerForm() {
             <FormCard>
               {LightConeConditionals.getDisplayForLightCone(selectedLightCone.id, lightConeSuperimposition)}
             </FormCard>  
+            
           </FormRow>
         </FilterContainer>
       </Form>
@@ -1274,40 +1318,4 @@ function ConditionalSetOption(props) {
       </Flex>
     )
   }
-}
-
-function PermutationDisplayPanel(props) {
-  return (
-    <Flex vertical>
-      <PermutationDisplay left='Head' right={props.optimizerPermutationDetails.Head} total={props.optimizerPermutationDetails.HeadTotal} />
-      <PermutationDisplay left='Hands' right={props.optimizerPermutationDetails.Hands} total={props.optimizerPermutationDetails.HandsTotal} />
-      <PermutationDisplay left='Body' right={props.optimizerPermutationDetails.Body} total={props.optimizerPermutationDetails.BodyTotal} />
-      <PermutationDisplay left='Feet' right={props.optimizerPermutationDetails.Feet} total={props.optimizerPermutationDetails.FeetTotal} />
-      <PermutationDisplay left='Link Rope' right={props.optimizerPermutationDetails.LinkRope} total={props.optimizerPermutationDetails.LinkRopeTotal} />
-      <PermutationDisplay left='Planar Sphere' right={props.optimizerPermutationDetails.PlanarSphere} total={props.optimizerPermutationDetails.PlanarSphereTotal} />
-      <div style={{ height: 10 }}></div>
-      <PermutationDisplay left='Perms' right={props.optimizerPermutationDetails.permutations} />
-      <PermutationDisplay left='Searched' right={props.searched} />
-      <PermutationDisplay left='Results' right={props.results} />
-    </Flex>
-  )
-}
-
-
-function PermutationDisplay(props) {
-  let rightText = props.total
-    ? `${Number(props.right).toLocaleString()} / ${Number(props.total).toLocaleString()}`
-    : `${Number(props.right).toLocaleString()}`
-
-  return (
-    <Flex justify='space-between'>
-      <Text style={{ lineHeight: '24px' }}>
-        {props.left}
-      </Text>
-      <Divider style={{ margin: 'auto 10px', flexGrow: 1, width: 'unset', minWidth: 'unset' }} dashed />
-      <Text style={{ lineHeight: '24px' }}>
-        {rightText}
-      </Text>
-    </Flex>
-  )
 }
