@@ -48,7 +48,7 @@ self.onmessage = function (e) {
   let character = data.character;
   let Stats = Constants.Stats;
   let statValues = Object.values(Stats)
-  let arr = new Float32Array(data.buffer)
+  let arr = new Float64Array(data.buffer)
 
   let headRelics = relics.Head;
   let handsRelics = relics.Hands;
@@ -140,6 +140,9 @@ self.onmessage = function (e) {
       let ornamentSetCount = data.consts.ornamentSetCount
       let relicSetIndex = setH + setB * relicSetCount + setG * relicSetCount * relicSetCount + setF * relicSetCount * relicSetCount * relicSetCount
       let ornamentSetIndex = setP + setL * ornamentSetCount;
+
+      c.relicSetIndex = relicSetIndex
+      c.ornamentSetIndex = ornamentSetIndex
 
       c.sets = {}
       let sets = c.sets

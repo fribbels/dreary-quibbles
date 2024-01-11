@@ -1,6 +1,6 @@
 import {Stats} from "./constants";
 
-const SIZE = 33
+const SIZE = 35
 
 // When adding new rows, use:
 // let i = 0
@@ -43,6 +43,8 @@ export const BufferPacker = {
       xERR:   arr[offset + 30], // 30
       xOHB:   arr[offset + 31],
       xELEMENTAL_DMG:  arr[offset + 32],
+      relicSetIndex: arr[offset + 33],
+      ornamentSetIndex: arr[offset + 34],
     }
   },
 
@@ -91,13 +93,15 @@ export const BufferPacker = {
     arr[offset + 30] = character.x[Stats.ERR] // 30
     arr[offset + 31] = character.x[Stats.OHB]
     arr[offset + 32] = character.x.ELEMENTAL_DMG
+    arr[offset + 33] = character.relicSetIndex
+    arr[offset + 34] = character.ornamentSetIndex
   },
 
   cleanFloatBuffer: (buffer) => {
-    new Float32Array(buffer).fill(0);
+    new Float64Array(buffer).fill(0);
   },
 
   createFloatBuffer: (length) => {
-    return new Float32Array(length * SIZE).buffer
+    return new Float64Array(length * SIZE).buffer
   }
 }
