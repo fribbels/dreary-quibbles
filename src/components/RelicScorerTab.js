@@ -1,5 +1,5 @@
 import { PlusOutlined } from '@ant-design/icons';
-import React, { useState, useReducer } from 'react';
+import React, {useState, useReducer, useEffect} from 'react';
 import {
   Button,
   Cascader,
@@ -101,6 +101,10 @@ export default function RelicScorerTab(props) {
       });
   }
 
+  function scoringClicked() {
+    setIsScoringModalOpen(true)
+  }
+
   function CharacterPreviewSelection(props) {
     const [downloadLoading, setDownloadLoading] = useState(false);
     const [previewVisible, setPreviewVisible] = useState(false);
@@ -112,6 +116,10 @@ export default function RelicScorerTab(props) {
     window.forceRelicScorerTabUpdate = forceUpdate
 
     console.log('CharacterPreviewSelection', props)
+
+    useEffect(() => {
+      setSelectedScoringCharacter(selectedCharacter?.id)
+    }, [selectedCharacter])
 
     let options = []
     for (let i = 0; i < props.availableCharacters.length; i++) {
@@ -128,12 +136,8 @@ export default function RelicScorerTab(props) {
 
     function selectionChange(selected) {
       console.log('selectionChange', selected)
-      setSelectedCharacter(props.availableCharacters.find(x => x.id == selected))
-    }
-
-    function scoringClicked() {
-      setSelectedScoringCharacter(selectedCharacter?.id)
-      setIsScoringModalOpen(true)
+      setSelectedCharacter(availableCharacters.find(x => x.id == selected))
+      setSelectedScoringCharacter(selected)
     }
 
     async function downloadClicked() { // deprecated
@@ -150,19 +154,27 @@ export default function RelicScorerTab(props) {
       })
     }
 
+    async function importClicked() {
+      let newRelics = availableCharacters
+        .flatMap(x => Object.values(x.equipped))
+        .filter(x => !!x)
+
+      console.log('importClicked', availableCharacters, newRelics)
+      DB.mergeVerifiedRelicsWithState(newRelics)
+    }
+
     return (
-      <Flex vertical align='center' gap={20} style={{ marginBottom: 100 }}>
-        <Flex gap={30}>
-          <Button
-            type="primary"
-            style={{ width: 200 }}
-            onClick={scoringClicked}
-          >
-            Scoring algorithm
+      <Flex vertical align='center' gap={5} style={{ marginBottom: 100 }}>
+        <Flex gap={30} style={{display: (availableCharacters.length > 0) ? 'block' : 'none'}}>
+          <Button onClick={importClicked}>
+            Import relics into optimizer
           </Button>
         </Flex>
+
         <Flex vertical align='center'>
+
           <Segmented options={options} onChange={selectionChange} />
+
           <div style={{ display: modalSrc != Assets.getBlank() ? 'block' : 'none', marginTop: modalSrc ? 10 : 0 }}>
             <Image
               width={200}
@@ -209,6 +221,12 @@ export default function RelicScorerTab(props) {
             </Form.Item>
             <Button type="primary" htmlType="submit" loading={loading} onClick={buttonClick}>
               Submit
+            </Button>
+            <Button
+              style={{ width: 200 }}
+              onClick={scoringClicked}
+            >
+              Scoring algorithm
             </Button>
           </Flex>
         </Form>
