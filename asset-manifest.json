@@ -1,17 +1,17 @@
 {
   "files": {
     "main.css": "/dreary-quibbles/static/css/main.afd84876.css",
-    "main.js": "/dreary-quibbles/static/js/main.1369e2dc.js",
+    "main.js": "/dreary-quibbles/static/js/main.e1c73883.js",
     "static/js/530.eb1a8fe4.chunk.js": "/dreary-quibbles/static/js/530.eb1a8fe4.chunk.js",
     "static/js/843.a935fa1d.chunk.js": "/dreary-quibbles/static/js/843.a935fa1d.chunk.js",
     "index.html": "/dreary-quibbles/index.html",
     "main.afd84876.css.map": "/dreary-quibbles/static/css/main.afd84876.css.map",
-    "main.1369e2dc.js.map": "/dreary-quibbles/static/js/main.1369e2dc.js.map",
+    "main.e1c73883.js.map": "/dreary-quibbles/static/js/main.e1c73883.js.map",
     "530.eb1a8fe4.chunk.js.map": "/dreary-quibbles/static/js/530.eb1a8fe4.chunk.js.map",
     "843.a935fa1d.chunk.js.map": "/dreary-quibbles/static/js/843.a935fa1d.chunk.js.map"
   },
   "entrypoints": [
     "static/css/main.afd84876.css",
-    "static/js/main.1369e2dc.js"
+    "static/js/main.e1c73883.js"
   ]
 }
