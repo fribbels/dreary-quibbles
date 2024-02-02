@@ -1,17 +1,17 @@
 {
   "files": {
     "main.css": "/dreary-quibbles/static/css/main.a7fe89c7.css",
-    "main.js": "/dreary-quibbles/static/js/main.b0dae9db.js",
-    "static/js/679.a65685e2.chunk.js": "/dreary-quibbles/static/js/679.a65685e2.chunk.js",
+    "main.js": "/dreary-quibbles/static/js/main.f95dc405.js",
+    "static/js/679.44a3356a.chunk.js": "/dreary-quibbles/static/js/679.44a3356a.chunk.js",
     "static/js/843.17bf738c.chunk.js": "/dreary-quibbles/static/js/843.17bf738c.chunk.js",
     "index.html": "/dreary-quibbles/index.html",
     "main.a7fe89c7.css.map": "/dreary-quibbles/static/css/main.a7fe89c7.css.map",
-    "main.b0dae9db.js.map": "/dreary-quibbles/static/js/main.b0dae9db.js.map",
-    "679.a65685e2.chunk.js.map": "/dreary-quibbles/static/js/679.a65685e2.chunk.js.map",
+    "main.f95dc405.js.map": "/dreary-quibbles/static/js/main.f95dc405.js.map",
+    "679.44a3356a.chunk.js.map": "/dreary-quibbles/static/js/679.44a3356a.chunk.js.map",
     "843.17bf738c.chunk.js.map": "/dreary-quibbles/static/js/843.17bf738c.chunk.js.map"
   },
   "entrypoints": [
     "static/css/main.a7fe89c7.css",
-    "static/js/main.b0dae9db.js"
+    "static/js/main.f95dc405.js"
   ]
 }
