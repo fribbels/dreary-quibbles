@@ -9,7 +9,7 @@ import legacy from '@vitejs/plugin-legacy'
 const pathPlugin = viteTsconfigPaths()
 
 export default defineConfig({
-  base: '/hsr-optimizer',
+  base: '/dreary-quibbles',
   plugins: [
     react(),
     pathPlugin,
