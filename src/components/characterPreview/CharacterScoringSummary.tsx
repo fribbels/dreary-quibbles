@@ -10,6 +10,7 @@ import DB from 'lib/db'
 import React, { ReactElement } from 'react'
 import { StatCalculator } from 'lib/statCalculator'
 import StatText from 'components/characterPreview/StatText'
+import { HeaderText } from 'components/HeaderText'
 
 const { Text } = Typography
 
@@ -450,7 +451,7 @@ export const CharacterScoringSummary = (props: { simScoringResult: SimulationSco
         <VerticalDivider />
 
         <Flex vertical gap={defaultGap}>
-          <pre style={{ margin: 'auto' }}>
+          <pre style={{ marginLeft: 'auto', marginRight: 'auto' }}>
             Substat upgrade comparisons
           </pre>
           <ScoringStatUpgrades />
@@ -507,6 +508,7 @@ export function CharacterCardScoringStatUpgrades(props: { result: SimulationScor
 
   const setUpgrade = result.setUpgrades[0]
   if (setUpgrade.percent! - basePercent > 0) {
+    rows.splice(4, 1)
     rows.push(
       <Flex gap={3} key={Utils.randomId()} justify="space-between" align="center" style={{ width: '100%', paddingLeft: 1 }}>
         <img src={Assets.getSetImage(setUpgrade.simulation.request.simRelicSet1)} style={{ width: iconSize, height: iconSize, marginRight: 3 }} />
@@ -523,6 +525,11 @@ export function CharacterCardScoringStatUpgrades(props: { result: SimulationScor
   //  =>  ${(statUpgrade.percent! * 100).toFixed(2)}%
   return (
     <Flex vertical gap={3} align="center" style={{ paddingLeft: 6, paddingRight: 8, marginBottom: 5 }}>
+      <Flex vertical align="center">
+        <HeaderText style={{ fontSize: 16, marginBottom: 2 }}>
+          DPS score upgrades
+        </HeaderText>
+      </Flex>
       {rows}
     </Flex>
   )
