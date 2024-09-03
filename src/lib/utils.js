@@ -134,6 +134,30 @@ export const Utils = {
 
   // Util to capture a div and screenshot it to clipboard/file
   screenshotElementById: async (elementId, action, characterName) => {
+    const isMobile = Utils.isMobile()
+    const repeatLoadBlob = async () => {
+      const minDataLength = 1200000
+      const maxAttempts = isMobile ? 5 : 1
+      let i = 0
+      let blob
+
+      while (i < maxAttempts) {
+        i++
+        blob = await htmlToImage.toBlob(document.getElementById(elementId), { pixelRatio: 1.5 })
+
+        if (blob.size > minDataLength) {
+          break
+        }
+      }
+
+      if (isMobile) {
+        // Render again
+        blob = await htmlToImage.toBlob(document.getElementById(elementId), { pixelRatio: 1.5 })
+      }
+
+      return blob
+    }
+
     function handleBlob(blob) {
       const prefix = characterName || 'Hsr-optimizer'
       const date = new Date().toLocaleDateString().replace(/[^apm\d]+/gi, '-')
@@ -141,7 +165,7 @@ export const Utils = {
       const filename = `${prefix}_${date}_${time}.png`
 
       if (action == 'clipboard') {
-        if (Utils.isMobile()) {
+        if (isMobile) {
           const file = new File([blob], filename, { type: 'image/png' })
           if (navigator.canShare && navigator.canShare({ files: [file] })) {
             navigator.share({
@@ -179,22 +203,11 @@ export const Utils = {
       }
     }
 
-    return new Promise((resolve, reject) => {
-      const isMobile = Utils.isMobile()
-
-      if (isMobile) {
-        htmlToImage.toBlob(document.getElementById(elementId), { pixelRatio: 1.5, skipFonts: true }).then(() => {
-          htmlToImage.toBlob(document.getElementById(elementId), { pixelRatio: 1.5, skipFonts: true }).then((blob) => {
-            handleBlob(blob)
-            resolve()
-          })
-        })
-      } else {
-        htmlToImage.toBlob(document.getElementById(elementId), { pixelRatio: 1.5, skipFonts: true }).then((blob) => {
-          handleBlob(blob)
-          resolve()
-        })
-      }
+    return new Promise((resolve) => {
+      repeatLoadBlob().then((blob) => {
+        handleBlob(blob)
+        resolve()
+      })
     })
   },
 
