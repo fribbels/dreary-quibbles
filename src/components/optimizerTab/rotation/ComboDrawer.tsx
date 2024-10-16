@@ -20,6 +20,7 @@ import { GenerateBasicSetsOptions } from 'components/optimizerTab/optimizerForm/
 import { FormSelectWithPopover } from 'components/optimizerTab/conditionals/FormSelect'
 import { ConditionalSetMetadata, generateSetConditionalContent } from 'lib/optimizer/rotation/setConditionalContent'
 import { ConditionalDataType } from 'lib/constants'
+import { ColorizedLinkWithIcon } from 'components/common/ColorizedLink'
 
 const buttonStyle = {
   fontSize: 20,
@@ -50,7 +51,7 @@ export function ComboDrawer() {
 
   return (
     <Drawer
-      title='Advanced Rotation'
+      title={<ComboDrawerTitle/>}
       placement='right'
       onClose={() => setComboDrawerOpen(false)}
       open={comboDrawerOpen}
@@ -122,6 +123,17 @@ export function ComboDrawer() {
         />
       </div>
     </Drawer>
+  )
+}
+
+function ComboDrawerTitle() {
+  return (
+    <div style={{ width: 'fit-content' }}>
+      <ColorizedLinkWithIcon
+        text='Advanced Rotation User Guide'
+        url='https://github.com/fribbels/hsr-optimizer/blob/main/docs/guides/en/advanced-rotations.md'
+      />
+    </div>
   )
 }
 
