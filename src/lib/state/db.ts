@@ -40,7 +40,7 @@ const state: HsrOptimizerMetadataState = {
 }
 
 // This string is replaced by /dreary-quibbles by github actions, don't change
-export const BASE_PATH = '/hsr-optimizer'
+export const BASE_PATH = '/dreary-quibbles'
 
 export const AppPages = {
   OPTIMIZER: 'OPTIMIZER',
