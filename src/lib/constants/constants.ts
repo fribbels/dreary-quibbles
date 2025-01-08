@@ -4,6 +4,7 @@ import gameData from 'data/game_data.json'
 // Semver defined optimizer version
 export const CURRENT_OPTIMIZER_VERSION = 'v3.0.5'
 // Represents the beta data content version, used for display but not for update notifications
+
 export const CURRENT_DATA_VERSION = '3.0v5'
 
 export const Stats = {
