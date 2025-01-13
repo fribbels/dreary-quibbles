@@ -686,7 +686,7 @@ function getSuperimpositions(): Record<string, DBMetadataSuperimpositions> {
       4: { [Constants.Stats.CD]: 0.54 },
       5: { [Constants.Stats.CD]: 0.60 },
     },
-    23038: {
+    23039: {
       1: { [Constants.Stats.HP_P]: 0.18 },
       2: { [Constants.Stats.HP_P]: 0.21 },
       3: { [Constants.Stats.HP_P]: 0.24 },
@@ -7130,6 +7130,7 @@ function getScoringMetadata(): Record<string, ScoringMetadata> {
         ],
         [Parts.LinkRope]: [
           Stats.HP_P,
+          Stats.ERR,
         ],
       },
       presets: [],
@@ -7164,6 +7165,7 @@ function getScoringMetadata(): Record<string, ScoringMetadata> {
         comboAbilities: [NULL, ULT, FUA, FUA, BASIC, FUA, FUA],
         comboDot: 0,
         comboBreak: 0,
+        errRopeEidolon: 0,
         relicSets: [
           [Sets.LongevousDisciple, Sets.LongevousDisciple],
           [Sets.GeniusOfBrilliantStars, Sets.GeniusOfBrilliantStars],
