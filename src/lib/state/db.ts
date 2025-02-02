@@ -43,8 +43,13 @@ const state: HsrOptimizerMetadataState = {
   metadata: {} as DBMetadata, // generated, not saved
 }
 
+export enum BasePath {
+  MAIN = '/hsr-optimizer',
+  BETA = '/dreary-quibbles',
+}
+
 // This string is replaced by /dreary-quibbles by github actions, don't change
-export const BASE_PATH = '/dreary-quibbles'
+export const BASE_PATH: BasePath = BasePath.BETA
 
 export const AppPages = {
   OPTIMIZER: 'OPTIMIZER',
