@@ -6,7 +6,7 @@ export enum BasePath {
 }
 
 // This string is replaced by BasePath.BETA by github actions, don't change
-export const BASE_PATH: BasePath = BasePath.MAIN
+export const BASE_PATH: BasePath = BasePath.BETA
 
 export enum AppPages {
   HOME = 'HOME',
