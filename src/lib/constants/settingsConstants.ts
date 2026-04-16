@@ -20,7 +20,7 @@ export const SettingOptions = {
   },
   ShowComboDmgWarning: {
     Show: 'Show',
-    Hide: 'HideV2',
+    Hide: 'Hide',
   },
 } as const satisfies Record<keyof UserSettings, Record<string, string>>
 
