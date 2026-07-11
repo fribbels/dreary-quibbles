@@ -3656,6 +3656,9 @@ export default interface Resources {
           "skillAtkBoost": {
             "content": "When the wearer uses their Skill, the Effect Hit Rate for this attack increases by {{EhrBuff}}%, and ATK increases by {{AtkBuff}}%.",
             "text": "Skill ATK boost"
+          },
+          "skillEhrBoost": {
+            "text": "Skill EHR boost"
           }
         }
       },
