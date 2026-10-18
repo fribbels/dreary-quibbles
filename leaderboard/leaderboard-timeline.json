@@ -1,42 +1,54 @@
 {
   "schemaVersion": 2,
-  "generatedAt": "2026-10-18T03:29:23.292Z",
+  "generatedAt": "2026-10-18T05:01:59.330Z",
   "events": [
+    {
+      "characterId": "1407",
+      "configType": "dps",
+      "candidateId": "b359d513c33d",
+      "date": "2026-10-18T03:59:12.000Z",
+      "score": 1.7818248688799725,
+      "rank": 5,
+      "buildId": "f88d7c3a0cef",
+      "type": "new_best",
+      "previousScore": 1.7332734537887462,
+      "previousRank": 15
+    },
     {
       "characterId": "1410",
       "configType": "dps",
-      "candidateId": "18bd8de9aeba",
       "date": "2026-10-18T03:15:20.000Z",
       "score": 1.5272325369236852,
       "rank": 50,
       "buildId": "b0572f27b430",
       "type": "new_best",
       "previousScore": 1.5257001913739137,
-      "previousRank": 41
+      "previousRank": 41,
+      "candidateId": "18bd8de9aeba"
     },
     {
       "characterId": "1505",
       "configType": "dps",
-      "candidateId": "d7f519376398",
       "date": "2026-10-18T02:18:58.000Z",
       "score": 1.52682872291621,
       "rank": 33,
       "buildId": "e9f6117dfd7c",
       "type": "new_best",
       "previousScore": 1.5001754100893545,
-      "previousRank": 72
+      "previousRank": 72,
+      "candidateId": "d7f519376398"
     },
     {
       "characterId": "1220",
       "configType": "dps",
-      "candidateId": "d0934191602e",
       "date": "2026-10-17T22:47:07.000Z",
       "score": 1.6067472152247038,
       "rank": 17,
       "buildId": "b32182864037",
       "type": "new_best",
       "previousScore": 1.5707607483927353,
-      "previousRank": 34
+      "previousRank": 34,
+      "candidateId": "d0934191602e"
     },
     {
       "characterId": "1405",
@@ -1148,17 +1160,6 @@
       "type": "new_character",
       "entryCount": 48158,
       "candidateId": "892b835f179c"
-    },
-    {
-      "characterId": "1102b1",
-      "configType": "dps",
-      "date": "2026-10-13T01:47:24.000Z",
-      "score": 1.548637818520549,
-      "rank": 29,
-      "buildId": "eb6566d43a77",
-      "type": "new_character",
-      "entryCount": 10806,
-      "candidateId": "c9c3a197670d"
     }
   ]
 }
