@@ -1,28 +1,40 @@
 {
   "schemaVersion": 2,
-  "generatedAt": "2026-11-03T05:10:51.617Z",
+  "generatedAt": "2026-11-03T17:12:42.593Z",
   "events": [
+    {
+      "characterId": "1508",
+      "configType": "dps",
+      "candidateId": "6d3f6a601baa",
+      "date": "2026-11-03T05:57:25.000Z",
+      "score": 1.5481333526255803,
+      "rank": 9,
+      "buildId": "886c2d3e6b98",
+      "type": "new_best",
+      "previousScore": 1.5077259724069387,
+      "previousRank": 23
+    },
     {
       "characterId": "1513",
       "configType": "dps",
-      "candidateId": "5c2ad106705c",
       "date": "2026-11-03T02:23:41.000Z",
       "score": 1.6649477672574824,
       "rank": 3,
       "buildId": "be96ce0021f4",
       "type": "new_character",
-      "entryCount": 12032
+      "entryCount": 12032,
+      "candidateId": "5c2ad106705c"
     },
     {
       "characterId": "1501",
       "configType": "dps",
-      "candidateId": "2c41d9a7125b",
       "date": "2026-11-02T22:10:58.000Z",
       "score": 1.576042925868298,
       "rank": 56,
       "buildId": "6e8cfe89291d",
       "type": "new_character",
-      "entryCount": 47658
+      "entryCount": 47658,
+      "candidateId": "2c41d9a7125b"
     },
     {
       "characterId": "1205b1",
@@ -1146,18 +1158,6 @@
       "previousScore": 1.5673788443131782,
       "previousRank": 56,
       "candidateId": "0da8982cd5a3"
-    },
-    {
-      "characterId": "1504",
-      "configType": "dps",
-      "date": "2026-10-25T17:05:31.000Z",
-      "score": 1.5486196300892145,
-      "rank": 78,
-      "buildId": "7d1d8146f816",
-      "type": "new_best",
-      "previousScore": 1.5270583940697597,
-      "previousRank": 101,
-      "candidateId": "f48799af0520"
     }
   ]
 }
