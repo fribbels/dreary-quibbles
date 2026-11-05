@@ -1,65 +1,65 @@
 {
   "schemaVersion": 2,
-  "generatedAt": "2026-11-04T23:09:16.970Z",
+  "generatedAt": "2026-11-05T05:08:28.828Z",
   "events": [
     {
       "characterId": "1310b1",
       "configType": "dps",
-      "candidateId": "d8972dae577b",
       "date": "2026-11-04T21:54:21.000Z",
       "score": 1.6543741743075198,
       "rank": 19,
       "buildId": "e07e2109ad96",
       "type": "new_best",
       "previousScore": 1.610269694494968,
-      "previousRank": 34
+      "previousRank": 34,
+      "candidateId": "d8972dae577b"
     },
     {
       "characterId": "1507",
       "configType": "dps",
-      "candidateId": "d74fd8b4c1a2",
       "date": "2026-11-04T19:15:31.000Z",
       "score": 1.5212331031999462,
       "rank": 48,
       "buildId": "60e190c01979",
       "type": "new_best",
       "previousScore": 1.4894789996634108,
-      "previousRank": 101
+      "previousRank": 101,
+      "candidateId": "d74fd8b4c1a2"
     },
     {
       "characterId": "1306b1",
       "configType": "support",
-      "candidateId": "212a348c4dd7",
       "date": "2026-11-04T18:26:45.000Z",
       "score": 1.5325203328031,
       "rank": 37,
       "buildId": "133f508e510a",
       "type": "new_character",
-      "entryCount": 40248
+      "entryCount": 40248,
+      "candidateId": "212a348c4dd7"
     },
     {
       "characterId": "1501",
       "configType": "dps",
-      "candidateId": "a7c9c7774fc3",
       "date": "2026-11-04T18:08:21.000Z",
       "score": 1.6643293362057596,
       "rank": 5,
       "buildId": "a5ceee09c883",
       "type": "new_best",
       "previousScore": 1.5399229663913523,
-      "previousRank": 101
+      "previousRank": 101,
+      "candidateId": "a7c9c7774fc3"
     },
     {
       "characterId": "1407",
       "configType": "dps",
-      "candidateId": "9fc925badaab",
       "date": "2026-11-04T17:03:22.000Z",
       "score": 1.680190662975014,
       "rank": 59,
       "buildId": "b1ad2871b4ba",
       "type": "new_best",
       "previousScore": 1.6491828953662395,
-      "previousRank": 101
+      "previousRank": 101,
+      "candidateId": "9fc925badaab"
     },
     {
       "characterId": "1413",
