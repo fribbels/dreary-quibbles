@@ -54,12 +54,15 @@ if (
     ) {
       ${B.action(O.CR,.6).wgsl(e,2)}
     }
-  `},qt={id:I.CelestialDifferentiator,setKey:`CelestialDifferentiator`,info:Wt,display:Gt,conditionals:Kt}}));function Yt(e){return[{display:e(`CityOfConvergingStars.Off.Display`),value:0,label:e(`CityOfConvergingStars.Off.Label`)},{display:e(`CityOfConvergingStars.AtkOnly.Display`),value:1,label:e(`CityOfConvergingStars.AtkOnly.Label`)},{display:e(`CityOfConvergingStars.CdOnly.Display`),value:2,label:e(`CityOfConvergingStars.CdOnly.Label`)},{display:e(`CityOfConvergingStars.Both.Display`),value:3,label:e(`CityOfConvergingStars.Both.Label`)}]}var Xt,Zt,Qt,$t,en=t((()=>{L(),z(),N(),g(),ft(),qe(),Xt={index:25,setType:Ke.ORNAMENT,ingameId:`326`,twoPieceStatTag:null},Zt={conditionalType:ye.SELECT,conditionalI18nKey:`Conditionals.CityOfConvergingStars`,modifiable:!0,selectionOptions:Yt,defaultValue:3},Qt={p2x:(e,t,n)=>{let r=n.valueCityOfConvergingStars;(r===1||r===3)&&e.buff(M.ATK_P,.24,e.source(R.CityOfConvergingStars)),(r===2||r===3)&&e.buff(M.CD,.12,e.source(R.CityOfConvergingStars))},teammate:[{value:I.CityOfConvergingStars,label:e=>e(`TeammateSets.CityOfConvergingStars.Text`),desc:e=>e(`TeammateSets.CityOfConvergingStars.Desc`),nonstackable:!0,effect:({x:e})=>{e.buff(M.CD,.12,e.targets(d.FullTeam).source(R.CityOfConvergingStars))}}],gpu:(e,t)=>`
+  `},qt={id:I.CelestialDifferentiator,setKey:`CelestialDifferentiator`,info:Wt,display:Gt,conditionals:Kt}}));function Yt(e){return[{display:e(`CityOfConvergingStars.Off.Display`),value:0,label:e(`CityOfConvergingStars.Off.Label`)},{display:e(`CityOfConvergingStars.AtkOnly.Display`),value:1,label:e(`CityOfConvergingStars.AtkOnly.Label`)},{display:e(`CityOfConvergingStars.CdOnly.Display`),value:2,label:e(`CityOfConvergingStars.CdOnly.Label`)},{display:e(`CityOfConvergingStars.Both.Display`),value:3,label:e(`CityOfConvergingStars.Both.Label`)}]}var Xt,Zt,Qt,$t,en=t((()=>{L(),Ve(),z(),N(),g(),ft(),qe(),Xt={index:25,setType:Ke.ORNAMENT,ingameId:`326`,twoPieceStatTag:null},Zt={conditionalType:ye.SELECT,conditionalI18nKey:`Conditionals.CityOfConvergingStars`,modifiable:!0,selectionOptions:Yt,defaultValue:3},Qt={p2x:(e,t,n)=>{let r=n.valueCityOfConvergingStars;(r===1||r===3)&&e.buff(M.ATK_P,.24,e.source(R.CityOfConvergingStars)),r!==2&&r!==3||e.config.teammateSetEffects[I.CityOfConvergingStars]||e.buff(M.CD,.12,e.source(R.CityOfConvergingStars))},teammate:[{value:I.CityOfConvergingStars,label:e=>e(`TeammateSets.CityOfConvergingStars.Text`),desc:e=>e(`TeammateSets.CityOfConvergingStars.Desc`),nonstackable:!0,effect:({x:e})=>{e.buff(M.CD,.12,e.targets(d.FullTeam).source(R.CityOfConvergingStars))}}],gpu:(e,t)=>`
     if (ornament2p(*p_sets, SET_CityOfConvergingStars)) {
       if (setConditionals.valueCityOfConvergingStars == 1 || setConditionals.valueCityOfConvergingStars == 3) {
         ${B.action(O.ATK_P,.24).wgsl(e,2)}
       }
-      if (setConditionals.valueCityOfConvergingStars == 2 || setConditionals.valueCityOfConvergingStars == 3) {
+      if (
+        (setConditionals.valueCityOfConvergingStars == 2 || setConditionals.valueCityOfConvergingStars == 3)
+        && ${ze(e.config.teammateSetEffects[I.CityOfConvergingStars])}
+      ) {
         ${B.action(O.CD,.12).wgsl(e,3)}
       }
     }
